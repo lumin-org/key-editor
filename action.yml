@@ -15,10 +15,12 @@ runs:
     - name: Convert paths to array
       shell: bash
       run: |
-        FILE_PATHS="${{ inputs.file-paths }}"
-        IFS='\n' read -r -a FILE_ARRAY <<< "$FILE_PATHS"
-        FILE_ARRAY_STR="${FILE_ARRAY[*]}"
-        echo "FILE_ARRAY=${FILE_ARRAY_STR}" >> $GITHUB_ENV
+        echo "${{ inputs.file_paths }}" > file_paths.txt
+        FILE_ARRAY=()
+        while IFS= read -r line; do
+          FILE_ARRAY+=("$(echo "$line" | sed 's/[[:space:]]*$//')")
+        done < file_paths.txt
+        printf '%s\n' "${FILE_ARRAY[@]}"
 
     - name: Get version from tag
       shell: bash
