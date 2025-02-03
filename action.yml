@@ -15,10 +15,10 @@ runs:
     - name: Convert paths to array
       shell: bash
       run: |
-        echo "Processing file paths..."
-        echo "${{ inputs.file_paths }}" > file_paths.txt
-        mapfile -t FILE_ARRAY < file_paths.txt
-        echo "FILE_ARRAY=(${FILE_ARRAY[*]})" >> $GITHUB_ENV
+        FILE_PATHS="${{ inputs.file-paths }}"
+        IFS='\n' read -r -a FILE_ARRAY <<< "$FILE_PATHS"
+        FILE_ARRAY_STR="${FILE_ARRAY[*]}"
+        echo "FILE_ARRAY=(${FILE_ARRAY_STR})" >> $GITHUB_ENV
 
     - name: Get version from tag
       shell: bash
