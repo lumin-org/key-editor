@@ -20,8 +20,6 @@ runs:
         while IFS= read -r line; do
           FILE_ARRAY+=("$(echo "$line" | sed 's/[[:space:]]*$//')")
         done < file-paths.txt
-        echo "Processed file paths:"
-        printf '%s\n' "${FILE_ARRAY[@]}"
 
     - name: Get version from tag
       shell: bash
@@ -36,6 +34,8 @@ runs:
     - name: Write to file versions
       shell: bash
       run: |
+        echo "Processed file paths:"
+        printf '%s\n' "${FILE_ARRAY[@]}"
         for file in "${FILE_ARRAY[@]}"; do
           echo "Processing: '$file'"
           if [[ -f "$file" ]]; then
