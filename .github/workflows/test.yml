@@ -1,0 +1,24 @@
+name: Action Test
+on: 
+  workflow_dispatch:
+  push:
+    paths:
+      - '**.yml'
+  pull_request:
+    paths:
+      - '**.yml'
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  test:
+    uses: ./.github/workflows/env.yml
+    with:
+      version: "v2.0.0"
+      file-paths: |
+        ./tests/test.json
+        ./tests/test.toml
+      
+      

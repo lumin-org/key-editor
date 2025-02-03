@@ -1,0 +1,50 @@
+name: version-bumper
+description: A github action that bumps the version of TOML or JSON files
+
+inputs:
+  file-paths:
+    description: "List of file paths separated by new lines"
+    required: true
+  version:
+    description: "A specific version to set, defaults to git tag"
+    required: false
+
+runs:
+  using: composite
+  steps:
+    - name: Convert paths to array
+      shell: bash
+      run: |
+        echo "Processing file paths..."
+        echo "${{ inputs.file_paths }}" > file_paths.txt
+        mapfile -t FILE_ARRAY < file_paths.txt
+        echo "FILE_ARRAY=(${FILE_ARRAY[*]})" >> $GITHUB_ENV
+
+    - name: Get version from tag
+      shell: bash
+      run: |
+        if [[ -n "${{ inputs.tag }}" ]]; then
+          VERSION="${{ inputs.tag }}"
+        else
+          VERSION="${GITHUB_REF#refs/tags/v}"
+        fi
+        echo "VERSION=$VERSION" >> $GITHUB_ENV
+
+    - name: Write to file versions
+      shell: bash
+      run: |
+        for file in "${FILE_ARRAY[@]}"; do
+          if [[ -f "$file" ]]; then
+            if [[ "$file" == *.json ]]; then
+              jq --indent 4 ".version = \"$VERSION\"" "$file" > tmp.json && mv tmp.json "$file"
+            elif [[ "$file" == *.toml ]]; then
+              sed -i -E "s/^version\s*=\s*\"[^\"]+\"/version = \"$VERSION\"/" "$file"
+            fi
+          else
+            echo "$file is an invalid path"
+          fi
+        done
+
+branding:
+  icon: file
+  color: orange
