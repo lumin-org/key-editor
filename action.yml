@@ -15,11 +15,11 @@ runs:
     - name: Convert paths to array
       shell: bash
       run: |
-        echo "${{ inputs.file_paths }}" > file_paths.txt
+        echo "${{ inputs.file-paths }}" > file_paths.txt
         FILE_ARRAY=()
         while IFS= read -r line; do
           FILE_ARRAY+=("$(echo "$line" | sed 's/[[:space:]]*$//')")
-        done < file_paths.txt
+        done < file-paths.txt
         echo "Processed file paths:"
         printf '%s\n' "${FILE_ARRAY[@]}"
 
