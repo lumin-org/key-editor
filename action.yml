@@ -34,6 +34,7 @@ runs:
       shell: bash
       run: |
         for file in "${FILE_ARRAY[@]}"; do
+          echo "Processing: '$file'"
           if [[ -f "$file" ]]; then
             if [[ "$file" == *.json ]]; then
               jq --indent 4 ".version = \"$VERSION\"" "$file" > tmp.json && mv tmp.json "$file"
