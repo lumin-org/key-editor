@@ -20,6 +20,7 @@ runs:
         while IFS= read -r line; do
           FILE_ARRAY+=("$(echo "$line" | sed 's/[[:space:]]*$//')")
         done < file_paths.txt
+        echo "Processed file paths:"
         printf '%s\n' "${FILE_ARRAY[@]}"
 
     - name: Get version from tag
