@@ -23,8 +23,8 @@ runs:
     - name: Get version from tag
       shell: bash
       run: |
-        if [[ -n "${{ inputs.tag }}" ]]; then
-          VERSION="${{ inputs.tag }}"
+        if [[ -n "${{ inputs.version }}" ]]; then
+          VERSION="${{ inputs.version }}"
         else
           VERSION="${GITHUB_REF#refs/tags/v}"
         fi
