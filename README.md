@@ -8,14 +8,15 @@ A github action that bumps the version of TOML or JSON files
 
 ## Prerequisites
 
-In order to use **lumin/version-bumper** you must be using one of the following architectures:
+In order to use **lumin/version-bumper** you must be using one of the following server types:
 
-* [`X86_64`](https://en.wikipedia.org/wiki/X86-64)
-* [`AArch64`](https://en.wikipedia.org/wiki/AArch64)
+* [`macOS`](https://en.wikipedia.org/wiki/macOS)
+* [`Linux`](https://en.wikipedia.org/wiki/Linux)
+* [`Windows`](https://en.wikipedia.org/wiki/Windows)
 
 ## Usage
 
-Use the latest version, with the latest git tag and some files
+Use the latest version, with the latest git tag and some TOML + JSON files
 
 ```yaml
 steps:

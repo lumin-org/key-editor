@@ -25,7 +25,6 @@ runs:
         done < file-paths.txt
         printf "%s\n" "${FILE_ARRAY[@]}" > file_paths_env.txt
 
-
     - name: Get version from tag
       shell: bash
       run: |
