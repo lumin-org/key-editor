@@ -23,8 +23,6 @@ runs:
             FILE_ARRAY+=("$trimmed_line")
           fi
         done < file-paths.txt
-        printf "%s\n" "${FILE_ARRAY[@]}" > file_paths_env.txt
-
 
     - name: Get version from tag
       shell: bash
@@ -45,15 +43,17 @@ runs:
           FILE_ARRAY+=("$line")
         done < file_paths_env.txt
 
-        printf '%s\n' "${FILE_ARRAY[@]}"
-
         for file in "${FILE_ARRAY[@]}"; do
           echo "Processing: '$file'"
           if [[ -f "$file" ]]; then
             if [[ "$file" == *.json ]]; then
               jq --indent 4 ".version = \"$VERSION\"" "$file" > tmp.json && mv tmp.json "$file"
             elif [[ "$file" == *.toml ]]; then
-              sed -i -E "s/^version\s*=\s*\"[^\"]+\"/version = \"$VERSION\"/" "$file"
+              if [[ "$OSTYPE" == "darwin"* ]]; then
+                sed -i '' -E "s/^version\s*=\s*\"[^\"]+\"/version = \"$VERSION\"/" "$file"
+              else
+                sed -i -E "s/^version\s*=\s*\"[^\"]+\"/version = \"$VERSION\"/" "$file"
+              fi
             fi
           else
             echo "$file is an invalid path"
