@@ -53,10 +53,10 @@ runs:
             if [[ "$file" == *.json ]]; then
               jq --indent 4 ".version = \"$VERSION\"" "$file" > tmp.json && mv tmp.json "$file"
             elif [[ "$file" == *.toml ]]; then
-              if [[ "$OSTYPE" == "darwin"* ]]; then
-                sed -i '' -E "s/^version\s*=\s*\"[^\"]+\"/version = \"$VERSION\"/" "$file"
-              else
+              if [[ "$RUNNER_OS" == "Windows" ]]; then
                 sed -i -E "s/^version\s*=\s*\"[^\"]+\"/version = \"$VERSION\"/" "$file"
+              else
+                awk -v newver="$VERSION" '/^version *= *".*"$/ {$0 = "version = \"" newver "\""}1' "$file" > tmp.toml && mv tmp.toml "$file"
               fi
             fi
           else
