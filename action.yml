@@ -18,8 +18,13 @@ runs:
         echo "${{ inputs.file-paths }}" > file-paths.txt
         FILE_ARRAY=()
         while IFS= read -r line; do
-          FILE_ARRAY+=("$(echo "$line" | sed 's/[[:space:]]*$//')")
+          trimmed_line=$(echo "$line" | sed 's/[[:space:]]*$//')
+          if [[ -n "$trimmed_line" ]]; then
+            FILE_ARRAY+=("$trimmed_line")
+          fi
         done < file-paths.txt
+        printf "%s\n" "${FILE_ARRAY[@]}" > file_paths_env.txt
+
 
     - name: Get version from tag
       shell: bash
@@ -35,7 +40,13 @@ runs:
       shell: bash
       run: |
         echo "Processed file paths:"
+        FILE_ARRAY=()
+        while IFS= read -r line; do
+          FILE_ARRAY+=("$line")
+        done < file_paths_env.txt
+
         printf '%s\n' "${FILE_ARRAY[@]}"
+
         for file in "${FILE_ARRAY[@]}"; do
           echo "Processing: '$file'"
           if [[ -f "$file" ]]; then
