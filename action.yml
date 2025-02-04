@@ -1,4 +1,4 @@
-name: version-bumper
+name: file-version-bumper
 description: A github action that bumps the version of TOML or JSON files
 
 inputs:
