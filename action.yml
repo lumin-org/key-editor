@@ -1,13 +1,16 @@
-name: package-version-bumper
+name: key-editor
 description: A github action that bumps the version of TOML or JSON files
 
 inputs:
-  file-paths:
+  files:
     description: "List of file paths separated by new lines"
     required: true
-  version:
-    description: "A specific version to set, defaults to git tag"
-    required: false
+  key:
+    description: "The key of the TOML/JSON file to change"
+    required: true
+  content:
+    description: "The string to set the specified key to"
+    required: true
 
 runs:
   using: composite
@@ -15,7 +18,7 @@ runs:
     - name: Convert paths to array
       shell: bash
       run: |
-        echo "${{ inputs.file-paths }}" > file-paths.txt
+        echo "${{ inputs.files }}" > file-paths.txt
         FILE_ARRAY=()
         while IFS= read -r line; do
           trimmed_line=$(echo "$line" | sed 's/[[:space:]]*$//')
@@ -25,21 +28,11 @@ runs:
         done < file-paths.txt
         printf "%s\n" "${FILE_ARRAY[@]}" > file_paths_env.txt
 
-    - name: Get version from tag
+    - name: Write to file keys
       shell: bash
       run: |
-        if [[ -n "${{ inputs.version }}" ]]; then
-          VERSION="${{ inputs.version }}"
-        else
-          TAG="${{ github.ref_name }}"
-          PREFIX="v"
-          VERSION=${TAG#"$PREFIX"}
-        fi
-        echo "VERSION=$VERSION" >> $GITHUB_ENV
-
-    - name: Write to file versions
-      shell: bash
-      run: |
+        KEY="${{ inputs.key }}"
+        CONTENT="${{ inputs.content }}"
         echo "Processed file paths:"
         FILE_ARRAY=()
         while IFS= read -r line; do
@@ -52,12 +45,12 @@ runs:
           echo "Processing: '$file'"
           if [[ -f "$file" ]]; then
             if [[ "$file" == *.json ]]; then
-              jq --indent 4 ".version = \"$VERSION\"" "$file" > tmp.json && mv tmp.json "$file"
+              jq --indent 4 ".\"$KEY\" = \"$CONTENT\"" "$file" > tmp.json && mv tmp.json "$file"
             elif [[ "$file" == *.toml ]]; then
               if [[ "$RUNNER_OS" == "Windows" ]]; then
-                sed -i -E "s/^version\s*=\s*\"[^\"]+\"/version = \"$VERSION\"/" "$file"
+                sed -i -E "s/^$KEY\s*=\s*\"[^\"]+\"/$KEY = \"$CONTENT\"/" "$file"
               else
-                awk -v newver="$VERSION" '/^version *= *".*"$/ {$0 = "version = \"" newver "\""}1' "$file" > tmp.toml && mv tmp.toml "$file"
+                awk -v content="$CONTENT" key="$KEY" ''$0 ~ "^" key " *= *\".*\"$" { $0 = key " = \"" content "\"" }1' "$file" > tmp.toml && mv tmp.toml "$file"
               fi
             fi
           else
