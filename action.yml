@@ -50,7 +50,7 @@ runs:
               if [[ "$RUNNER_OS" == "Windows" ]]; then
                 sed -i -E "s/^$KEY\s*=\s*\"[^\"]+\"/$KEY = \"$CONTENT\"/" "$file"
               else
-                awk -v content="$CONTENT" key="$KEY" ''$0 ~ "^" key " *= *\".*\"$" { $0 = key " = \"" content "\"" }1' "$file" > tmp.toml && mv tmp.toml "$file"
+                awk -v content="$CONTENT" key="$KEY" '/^key *= *".*"$/ {$0 = "key = \"" content "\""}1' "$file" > tmp.toml && mv tmp.toml "$file"
               fi
             fi
           else
