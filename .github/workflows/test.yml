@@ -19,17 +19,17 @@ jobs:
       content: "2.0.0"
       key: "version"
       files: |
-        ./tests/test1.json
-        ./tests/test1.toml
+        ./tests/test.json
+        ./tests/test.toml
 
   test2:
     uses: ./.github/workflows/env.yml
     with:
       content: "very cool"
-      key: "random"
+      key: "other"
       files: |
-        ./tests/test2.json
-        ./tests/test2.toml
+        ./tests/test.json
+        ./tests/test.toml
           
       
       
