@@ -1,5 +1,5 @@
 name: key-editor
-description: A github action that bumps the version of TOML or JSON files
+description: A github action that edits the specified key of TOML or JSON files 
 
 inputs:
   files:
