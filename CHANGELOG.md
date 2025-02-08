@@ -7,11 +7,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.2.0] - 2025-02-07
+
+### Added
+
+- Support for any key to be edited
+
+### Changed
+
+- Changed `file-paths` to `files`
+
 ## [0.1.0] - 2025-02-03
 
 ### Added
 
-Initial release!
+- Initial release!
 
-[unreleased]: https://github.com/lumin-org/version-bumper/compare/v0.1.0...HEAD
-[0.1.0]: https://github.com/lumin-org/version-bumper/tag/v0.1.0
+[unreleased]: https://github.com/lumin-org/key-editor/compare/v0.2.0...HEAD
+[0.1.0]: https://github.com/lumin-org/key-editor/compare/v0.2.0...v0.1.0
+[0.1.0]: https://github.com/lumin-org/key-editor/tag/v0.1.0
