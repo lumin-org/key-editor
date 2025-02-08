@@ -13,13 +13,23 @@ defaults:
     shell: bash
 
 jobs:
-  test:
+  test1:
     uses: ./.github/workflows/env.yml
     with:
       content: "2.0.0"
       key: "version"
       files: |
-        ./tests/test.json
-        ./tests/test.toml
+        ./tests/test1.json
+        ./tests/test1.toml
+
+  test2:
+    uses: ./.github/workflows/env.yml
+    with:
+      content: "very cool"
+      key: "random"
+      files: |
+        ./tests/test2.json
+        ./tests/test2.toml
+          
       
       
