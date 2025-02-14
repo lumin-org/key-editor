@@ -18,28 +18,23 @@ runs:
     - name: Convert paths to array
       shell: bash
       run: |
-        echo "${{ inputs.files }}" > file-paths.txt
         FILE_ARRAY=()
         while IFS= read -r line; do
           trimmed_line=$(echo "$line" | sed 's/[[:space:]]*$//')
           if [[ -n "$trimmed_line" ]]; then
             FILE_ARRAY+=("$trimmed_line")
           fi
-        done < file-paths.txt
-        printf "%s\n" "${FILE_ARRAY[@]}" > file_paths_env.txt
+        done <<< "${{ inputs.files }}"
 
     - name: Write to file keys
       shell: bash
       run: |
         KEY="${{ inputs.key }}"
         CONTENT="${{ inputs.content }}"
-        echo "Processed file paths:"
         FILE_ARRAY=()
         while IFS= read -r line; do
           FILE_ARRAY+=("$line")
-        done < file_paths_env.txt
-
-        printf '%s\n' "${FILE_ARRAY[@]}"
+        done <<< "${{ inputs.files }}"
 
         for file in "${FILE_ARRAY[@]}"; do
           echo "Processing: '$file'"
