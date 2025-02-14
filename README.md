@@ -20,9 +20,9 @@ Use the latest version, and bump a version key on config files
 
 ```yaml
 steps:
-- uses: lumin-org/key-editor@v0.2.0
+- uses: lumin-org/key-editor@v0.2.1
   with:
-    item: 'v1.0.0'
+    content: 'v1.0.0'
     key: version
     paths: |
       pesde.toml
